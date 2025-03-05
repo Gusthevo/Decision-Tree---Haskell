@@ -1,8 +1,8 @@
 -- Aqui só definimos o tipo de dado da árvore
-data Tree a = Leaf a | Node a (Tree a) (Tree a)
+data BinTree a = Leaf a | Node a (BinTree a) (BinTree a)
 
 -- Árvore de decisão para definir o que é nó de cada qual
-decisionTree :: Tree String
+decisionTree :: BinTree String
 decisionTree = 
     Node "Fez Poscomp?" 
         (Node "Nota do IRA >= 7?" 
@@ -29,14 +29,16 @@ decisionTree =
             (Leaf "Eliminado"))
 
 -- Aqui vamos navegar pela árvore baseado na decisão
-askQuestion :: Tree String -> IO String
+askQuestion :: BinTree String -> IO String
 askQuestion (Leaf result) = return result
 askQuestion (Node question left right) = do
     putStrLn question
     answer <- getLine
-    if answer == "sim"
-        then askQuestion left
-        else askQuestion right
+    if answer == "SIM" then askQuestion left
+    else if answer == "NÃO" then askQuestion right
+    else do
+        putStrLn "Entrada inválida! Responda com SIM ou NÃO."
+        askQuestion (Node question left right)
 
 -- Função principal para executar o programa interativo
 main :: IO ()
